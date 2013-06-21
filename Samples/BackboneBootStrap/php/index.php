@@ -43,6 +43,15 @@ POSSIBILITY OF SUCH DAMAGE.
   <script src="resources/lib/backbone-1.0.0.min.js" type="text/javascript"></script>
   <script src="resources/lib/forcetk.js" type="text/javascript"></script>
   <script src="resources/lib/force.entity.js" type="text/javascript"></script>
+  <script>
+    $( document ).on("mobileinit",
+      // Set up the "mobileinit" handler before including jQuery Mobile
+      function() {
+        $.mobile.ajaxEnabled = false;
+        $.mobile.linkBindingEnabled = false;
+      }
+    );
+  </script>
   <script src="resources/lib/jquerymobile.js" type="text/javascript"></script>
 
 <script>
@@ -55,9 +64,6 @@ var proxyUrl    = '<?=$_ENV['app_url']?>/proxy.php?mode=native';
 $(document).ready(function() {
   //Add event listeners and so forth here
   console.log("onLoad: jquery ready");
-	$.mobile.ajaxEnabled = false;
-  $.mobile.linkBindingEnabled = false;
-	console.log("mobile init end");
 	console.log('DOCUMENT READY '+window.location.href);
 	var oauthResponse = {};
 	if (window.location.hash && window.location.href.indexOf('access_token') > 0) {
@@ -273,7 +279,7 @@ function getAuthCredentialsError(error) {
         config: function() {
           return {type:"soql", query:"SELECT " + this.fieldlist.join(",") + " FROM Contact ORDER BY Name LIMIT 25"};
         }
-      }),
+      });
 
       //--------------
       // Views
