@@ -14,14 +14,11 @@
   <!-- ========= -->
   <!-- Libraries -->
   <!-- ========= -->
-  <script src="resources/lib/jquery.js" type="text/javascript"></script>
-  <script src="resources/lib/cordova-2.3.0.js"></script>
-  <script src="resources/lib/SFHybridApp.js"></script>
-  <script src="resources/lib/SalesforceOAuthPlugin.js"></script>
-  <script src="resources/lib/lodash.js" type="text/javascript"></script>
-  <script src="resources/lib/backbone.js" type="text/javascript"></script>
+  <script src="resources/lib/jquery-2.0.0.min.js" type="text/javascript"></script>
+  <script src="resources/lib/underscore-1.4.4.min.js" type="text/javascript"></script>
+  <script src="resources/lib/backbone-1.0.0.min.js" type="text/javascript"></script>
   <script src="resources/lib/forcetk.js" type="text/javascript"></script>
-  <script src="resources/lib/backbone.force.js" type="text/javascript"></script>
+  <script src="resources/lib/force.entity.js" type="text/javascript"></script>
   <script>
     $( document ).on("mobileinit",
                      // Set up the "mobileinit" handler before including jQuery Mobile
@@ -31,51 +28,54 @@
                      });
   </script>
   <script src="resources/lib/jquerymobile.js" type="text/javascript"></script>
+  <script src="resources/lib/cordova-2.3.0.js"></script>
+  <script src="resources/lib/cordova.force.js"></script>
+
+  <!-- log window styling -->
+  <style>
+    .logWindow {display:none; width:700px;}
+    .logWindow > p {padding:0px; margin:0px; word-wrap:break-word;}
+  </style>
 
   <script>
     var debugMode = true;
     var logToConsole = cordova.require("salesforce/util/logger").logToConsole;
     // The version of the Force.com REST API you wish to use in your app.
-    var apiVersion = "v27.0";
+    var apiVersion = "v28.0";
 
-    // Log JS errors to Cordova console
-    window.onerror = function(message, url, lineNumber) {
-      logToConsole("Error: "+message+" in "+url+" at line "+lineNumber);
-    }
-    
     jQuery(document).ready(function() {
         //Add event listeners and so forth here
         logToConsole("onLoad: jquery ready");
-		document.addEventListener("deviceready", onDeviceReady,false);
-
+		    document.addEventListener("deviceready", onDeviceReady,false);
     });
 
     // When this function is called, Cordova has been initialized and is ready to roll 
     function onDeviceReady() {
-        logToConsole("onDeviceReady: Cordova ready");
-		//Call getAuthCredentials to get the initial session credentials
-        cordova.require("salesforce/plugin/oauth").getAuthCredentials(salesforceSessionRefreshed, getAuthCredentialsError);
+      logToConsole("onDeviceReady: Cordova ready");
+		  //Call getAuthCredentials to get the initial session credentials
+      cordova.require("salesforce/plugin/oauth").getAuthCredentials(salesforceSessionRefreshed, getAuthCredentialsError);
 
-        //register to receive notifications when autoRefreshOnForeground refreshes the sfdc session
-        document.addEventListener("salesforceSessionRefresh",salesforceSessionRefreshed,false);
+      //register to receive notifications when autoRefreshOnForeground refreshes the sfdc session
+      document.addEventListener("salesforceSessionRefresh",salesforceSessionRefreshed,false);
     }
 
     function salesforceSessionRefreshed(creds) {
-        logToConsole("salesforceSessionRefreshed");
+      logToConsole("salesforceSessionRefreshed");
         
-        // Depending on how we come into this method, `creds` may be callback data from the auth
-        // plugin, or an event fired from the plugin.  The data is different between the two.
-        var credsData = creds;
-        if (creds.data)  // Event sets the `data` object with the auth data.
-            credsData = creds.data;
-        var client = new forcetk.Client(credsData.clientId, credsData.loginUrl);
-        client.setSessionToken(credsData.accessToken, apiVersion, credsData.instanceUrl);
-        client.setRefreshToken(credsData.refreshToken);
-		    myapp(client);
+      // Depending on how we come into this method, `creds` may be callback data from the auth
+      // plugin, or an event fired from the plugin.  The data is different between the two.
+      var credsData = creds;
+      if (creds.data)  // Event sets the `data` object with the auth data.
+        credsData = creds.data;
+
+      Force.init(credsData);
+      console.log("init backbone");
+      window.location.href = window.location.href.split('#')[0]+'#contacts';
+      myapp();
     }
 
     function getAuthCredentialsError(error) {
-        logToConsole("getAuthCredentialsError: " + error);
+      logToConsole("getAuthCredentialsError: " + error);
     }
   </script>
 </head>
@@ -86,7 +86,7 @@
   <!-- ========= -->
   <div id="contacts" data-role="page" data-title="Contacts">
     <div data-role="header">
-      <h1>Capture</h1>
+      <h1>Contacts</h1>
     </div><!-- /header -->
     <div data-role="content" id="contacts-content">
     </div>
@@ -95,7 +95,7 @@
   <div id="contact" data-role="page" data-title="Contact">
     <div data-role="header">
       	<a href='#' id="back" class='ui-btn-left' data-icon='arrow-l'>Back</a>
-		<h1>Capture</h1>
+		<h1>Contact</h1>
     </div><!-- /header -->
     <div data-role="content" id="contact-content">
     </div>
@@ -181,35 +181,33 @@
                          .attr('data-theme', cTheme);
     }
 
-
-
-    function myapp(client) {
-      logToConsole(client);
-      Backbone.Force.initialize(client);
-	  
+    function myapp() {
       var app = {}; // create namespace for our app
-	  	logToConsole("backbone started");
-	
+      logToConsole("backbone started");
+  
       //--------------
       // Models
       //--------------
-      app.Contact = Backbone.Force.Model.extend({
-        type:'Contact',
-        fields:['Id', 'Name', 'FirstName', 'LastName', 'Email']
+      app.Contact = Force.SObject.extend({
+        sobjectType:'Contact',
+        fieldlist:['Id', 'FirstName', 'LastName', 'Email']
       });
 
-      app.ContentVersion = Backbone.Force.Model.extend({
-        type:'ContentVersion',
-        fields:['ContentDocumentId']
+      app.ContentVersion = Force.SObject.extend({
+        sobjectType:'ContentVersion',
+        fieldlist:['ContentDocumentId', 'Origin', 'PathOnClient', 'VersionData']
       });
 
       //--------------
       // Collections
       //--------------
-      app.ContactsCollection = Backbone.Force.Collection.extend({
+      app.ContactsCollection = Force.SObjectCollection.extend({
         model: app.Contact,
-        query: "WHERE IsDeleted = false"
-      }),
+        fieldlist:['Id', 'Name', 'FirstName', 'LastName', 'Email'],
+        config: function() {
+          return {type:"soql", query:"SELECT " + this.fieldlist.join(",") + " FROM Contact ORDER BY Name LIMIT 25"};
+        }
+      });
 
       //--------------
       // Views
@@ -227,7 +225,7 @@
         }
       });
 
-  		logToConsole("contact list init");
+      logToConsole("contact list init");
     
       var showError = function(error){
         $.mobile.loading( "hide" );
@@ -280,9 +278,9 @@
                   }
                 };
                 logToConsole("in getPicture - payload: "+JSON.stringify(payload));
-                logToConsole("Client: "+JSON.stringify(client));
+                logToConsole("Client: "+JSON.stringify(Force.forcetkClient));
                 logToConsole('/v27.0/chatter/feeds/record/'+contactId+'/feed-items');
-                client.ajax('/v27.0/chatter/feeds/record/'+contactId+'/feed-items',
+                Force.forcetkClient.ajax('/v27.0/chatter/feeds/record/'+contactId+'/feed-items',
                   function(){
                     logToConsole("in getPicture - chatter success callback");
                     $.mobile.loading( "hide" );
@@ -380,8 +378,8 @@
         }
       });
 
-	  	logToConsole("contact edit init");
-	
+      logToConsole("contact edit init");
+  
 
       // renders the full list of Contacts calling ContactView for each one.
       app.ContactsView = Backbone.View.extend({
@@ -417,9 +415,9 @@
         }
       });
 
-			logToConsole("contact render init");
-		
-			logToConsole("contact router init begin");
+      logToConsole("contact render init");
+    
+      logToConsole("contact router init begin");
       //Define the Application Router
       app.Router = Backbone.Router.extend({ 
         routes: {
@@ -429,7 +427,7 @@
         },          
         contacts: function() {
           var contactsCollection = new app.ContactsCollection();
-		      logToConsole("collection begin");
+          logToConsole("collection begin");
           $.mobile.loading( "show", { text: 'Loading Contacts', textVisible: true } );
           logToConsole("collection search");
           contactsCollection.fetch({success: function(){
@@ -455,8 +453,8 @@
           }});
         }
       });
-	
-   	  app.router = new app.Router();
+  
+      app.router = new app.Router();
       logToConsole("contact router init end");
       Backbone.history.start();
       logToConsole("backbone end");
