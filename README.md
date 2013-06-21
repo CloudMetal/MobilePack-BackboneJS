@@ -15,11 +15,11 @@ The Mobile Pack for Backbone.js supports two deployment options for your HTML5 m
  
 ## What’s included in this Mobile Pack
 
-* `backbone.force.js` - a plugin library, originally written by [Piotr Walczyszyn](https://github.com/pwalczyszyn), but since extended for the Mobile Packs, that enables Force.com connectivity for Backbone's Model and Collection types.
+* `force.entity.js` - a plugin library that enables Force.com connectivity for Backbone's Model and Collection types.
 * `Samples/BackboneVFJQueryMobile` - a Visualforce page and supporting static resources that implements the single page contact management app.
-* `Samples/BackboneBootStrap` - sample mobile web applications that can be deployed outside Force.com; for example, to Heroku. Each serves up the same single page contact management app, but includes a back end implemented for a different web environment:
- * `Samples/BackboneBootStrap/nodejs` - for Node.js
- * `Samples/BackboneBootStrap/php` - for PHP
+* `Samples/BackboneWebJQueryMobile` - sample mobile web applications that can be deployed outside Force.com; for example, to Heroku. Each serves up the same single page contact management app, but includes a back end implemented for a different web environment:
+ * `Samples/BackboneWebJQueryMobile/nodejs` - for Node.js
+ * `Samples/BackboneWebJQueryMobile/php` - for PHP
 
 ![Main jQuery Mobile Sample Page](http://developerforce.github.com/Backbone.Force-Samples/jqm-login.png) ![Main jQuery Mobile Sample Page](http://developerforce.github.com/Backbone.Force-Samples/jqm-auth.png)
 
