@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		43862D311773FA6D00C7F884 /* Capture.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 43862D301773FA6D00C7F884 /* Capture.bundle */; };
 		824AA08F1725140400C9BD79 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 824AA08E1725140400C9BD79 /* UIKit.framework */; };
 		824AA0911725140400C9BD79 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 824AA0901725140400C9BD79 /* Foundation.framework */; };
 		824AA0931725140400C9BD79 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 824AA0921725140400C9BD79 /* CoreGraphics.framework */; };
@@ -57,7 +58,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		824AA08B1725140400C9BD79 /* BackboneCapture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BackboneCapture.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		43862D301773FA6D00C7F884 /* Capture.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Capture.bundle; sourceTree = "<group>"; };
+		824AA08B1725140400C9BD79 /* BackboneCapture.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BackboneCapture.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		824AA08E1725140400C9BD79 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		824AA0901725140400C9BD79 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		824AA0921725140400C9BD79 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -304,7 +306,7 @@
 				824AA0DF17251CDE00C9BD79 /* Plugins */,
 				824AA0951725140400C9BD79 /* Supporting Files */,
 			);
-			path = "BackboneCapture";
+			path = BackboneCapture;
 			sourceTree = "<group>";
 		};
 		824AA0951725140400C9BD79 /* Supporting Files */ = {
@@ -322,6 +324,7 @@
 		824AA0B41725151C00C9BD79 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				43862D301773FA6D00C7F884 /* Capture.bundle */,
 				824AA0B51725152500C9BD79 /* icons */,
 				824AA0B61725152C00C9BD79 /* splash */,
 				824AA0DB17251BD000C9BD79 /* SalesforceSDKResources.bundle */,
@@ -642,8 +645,8 @@
 			);
 			dependencies = (
 			);
-			name = "BackboneCapture";
-			productName = "BackboneCapture";
+			name = BackboneCapture;
+			productName = BackboneCapture;
 			productReference = 824AA08B1725140400C9BD79 /* BackboneCapture.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -654,7 +657,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0460;
-				ORGANIZATIONNAME = "Force.com";
+				ORGANIZATIONNAME = Force.com;
 			};
 			buildConfigurationList = 824AA0861725140400C9BD79 /* Build configuration list for PBXProject "BackboneCapture" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -696,6 +699,7 @@
 				824AA0E31725A40A00C9BD79 /* config.xml in Resources */,
 				824AA2181725AA3F00C9BD79 /* openssl_license.txt in Resources */,
 				824AA21E1725AA4000C9BD79 /* LICENSE in Resources */,
+				43862D311773FA6D00C7F884 /* Capture.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
